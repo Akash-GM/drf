@@ -1,17 +1,16 @@
 import requests
-import winsound
-import time
+
 
 endpoint = "http://localhost:8000/api/"
 
 
 
-get_response = requests.get(endpoint,json={"product_id":123})
+get_response = requests.post(endpoint,json={"title":"asdas","pricdrtge":"abasd"})
 
 
 
-print(get_response.text)
-print(get_response.headers)
+
+
 print(get_response.json())
 
 
