@@ -11,11 +11,7 @@ from api.authentication import TokenAuthentication
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    authentication_classes = [
-        authentication.SessionAuthentication,
-        TokenAuthentication,
-    ]
-    permission_classes = [IsStaffEditorPermissions]
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermissions]
 
     def perform_create(self, serializer):
 
@@ -33,6 +29,7 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermissions]
 
 
 # class ProductListAPIView(generics.RetrieveAPIView):
@@ -46,12 +43,23 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermissions]
 
     def perform_update(self, serializer):
         instance = serializer.save()
         if not instance.content:
             instance.content = instance.title
+
+
+class ProductDestroyAPIView(generics.DestroyAPIView):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = "pk"
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermissions]
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
 
 
 @api_view(["GET", "POST"])
