@@ -5,13 +5,17 @@ from .models import Product
 from .serializers import ProductSerializer
 from django.shortcuts import get_object_or_404
 from .permissions import IsStaffEditorPermissions
+from api.authentication import TokenAuthentication
 
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    authentication_classes = [authentication.SessionAuthentication]
-    permission_classes = [IsStaffEditorPermissions, permissions.IsAdminUser]
+    authentication_classes = [
+        authentication.SessionAuthentication,
+        TokenAuthentication,
+    ]
+    permission_classes = [IsStaffEditorPermissions]
 
     def perform_create(self, serializer):
 

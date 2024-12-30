@@ -18,8 +18,6 @@ class IsStaffEditorPermissions(permissions.DjangoModelPermissions):
     #     if request.user.is_staff:
     #         return True
 
-    #     return super().has_permission(request, view)
-
     # user = request.user
 
     # print(user.get_all_permissions())
