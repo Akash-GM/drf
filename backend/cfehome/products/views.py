@@ -14,14 +14,14 @@ class ProductListCreateAPIView(StaffEditorPermissionMixin, generics.ListCreateAP
     serializer_class = ProductSerializer
 
     def perform_create(self, serializer):
-
+        email = serializer.validated_data.pop("email")
         print(serializer.validated_data)
         title = serializer.validated_data.get("title")
         content = serializer.validated_data.get("content")
 
         if content is None:
             content = title
-
+        print("no i say no no no no")
         serializer.save(content=content)
 
 
