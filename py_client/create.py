@@ -1,10 +1,17 @@
 import requests
 
-headers = {"Authorization": "Bearer 12a41750b70cb6388bfcdb644ca846e067ef860c"}
+headers = {"Authorization": "Bearer d9987037d3c2b43ecfa542dc333439022c52954f"}
 endpoint = "http://localhost:8000/api/products/"
 
 get_response = requests.post(
-    endpoint, json={"title": "meowasdaawawe", "price": 99}, headers=headers
+    endpoint,
+    json={
+        "title": "meowasdasdasdaawawe",
+        "price": 99,
+        "email": "stalin@gmail.com",
+        "gopnik": "car",
+    },
+    headers=headers,
 )
 
 
