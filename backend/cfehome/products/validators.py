@@ -17,5 +17,7 @@ def validate_title_no_hello(value):
 
 
 unique_product_title = UniqueValidator(
-    queryset=Product.objects.all(), message="This title is already in use."
+    queryset=Product.objects.all(),
+    message="This title is already in use.",
+    lookup="iexact",
 )

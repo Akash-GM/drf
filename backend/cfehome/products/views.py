@@ -6,12 +6,15 @@ from .serializers import ProductSerializer
 from django.shortcuts import get_object_or_404
 from api.permissions import IsStaffEditorPermissions
 from api.authentication import TokenAuthentication
-from api.mixins import StaffEditorPermissionMixin
+from api.mixins import StaffEditorPermissionMixin, UserQuerySetMixin
 
 
-class ProductListCreateAPIView(StaffEditorPermissionMixin, generics.ListCreateAPIView):
+class ProductListCreateAPIView(
+    UserQuerySetMixin, StaffEditorPermissionMixin, generics.ListCreateAPIView
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    allow_staff_view = True
 
     def perform_create(self, serializer):
         email = serializer.validated_data.pop("email")
@@ -22,10 +25,21 @@ class ProductListCreateAPIView(StaffEditorPermissionMixin, generics.ListCreateAP
         if content is None:
             content = title
         print("no i say no no no no")
-        serializer.save(content=content)
+        serializer.save(user=self.request.user, content=content)
+
+    # def get_queryset(self, *args, **kwargs):
+    #     qs = super().get_queryset(*args, **kwargs)
+    #     request = self.request
+    #     user = request.user
+    #     if not user.is_authenticated:
+    #         return Product.objects.none()
+    #     print("what came from get queryset ")
+    #     return qs.filter(user=request.user)
 
 
-class ProductDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView):
+class ProductDetailAPIView(
+    UserQuerySetMixin, StaffEditorPermissionMixin, generics.RetrieveAPIView
+):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -37,7 +51,9 @@ class ProductDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView)
 #    serializer_class = ProductSerializer
 
 
-class ProductUpdateAPIView(StaffEditorPermissionMixin, generics.UpdateAPIView):
+class ProductUpdateAPIView(
+    UserQuerySetMixin, StaffEditorPermissionMixin, generics.UpdateAPIView
+):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -49,7 +65,9 @@ class ProductUpdateAPIView(StaffEditorPermissionMixin, generics.UpdateAPIView):
             instance.content = instance.title
 
 
-class ProductDestroyAPIView(StaffEditorPermissionMixin, generics.DestroyAPIView):
+class ProductDestroyAPIView(
+    UserQuerySetMixin, StaffEditorPermissionMixin, generics.DestroyAPIView
+):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
