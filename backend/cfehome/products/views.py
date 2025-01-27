@@ -14,7 +14,7 @@ class ProductListCreateAPIView(
 ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    allow_staff_view = True
+    # allow_staff_view = True
 
     def perform_create(self, serializer):
         email = serializer.validated_data.pop("email")

@@ -14,11 +14,12 @@ class ProductInlineSerializer(serializers.Serializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     user = UserPublicSerializer(read_only=True)
-    related_products = ProductInlineSerializer(
-        source="user.product_set.all", read_only=True, many=True
-    )
-    my_user_data = serializers.SerializerMethodField(read_only=True)
-    my_discount = serializers.SerializerMethodField(read_only=True)
+    # owner = UserPublicSerializer(source="user", read_only=True)
+    # related_products = ProductInlineSerializer(
+    #     source="user.product_set.all", read_only=True, many=True
+    # )
+    # my_user_data = serializers.SerializerMethodField(read_only=True)
+    # my_discount = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(
         view_name="product-detail", lookup_field="pk"
     )
@@ -33,6 +34,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             "url",
+            # "owner",
             "user",
             # "update_url",
             "email",
@@ -40,10 +42,10 @@ class ProductSerializer(serializers.ModelSerializer):
             "content",
             "price",
             "sale_price",
-            "my_discount",
+            #            "my_discount",
             "name",
-            "my_user_data",
-            "related_products",
+            #            "my_user_data",
+            #           "related_products",
         ]
 
     # def validate_title(self, value):
@@ -86,10 +88,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
         return reverse("product-update", kwargs={"pk": obj.pk}, request=request)
 
-    def get_my_discount(self, obj):
-        if not hasattr(obj, "id"):
-            return None
-        if not isinstance(obj, Product):
-            return None
+    # def get_my_discount(self, obj):
+    #     if not hasattr(obj, "id"):
+    #         return None
+    #     if not isinstance(obj, Product):
+    #         return None
 
-        return obj.get_discount()
+    #     return obj.get_discount()
